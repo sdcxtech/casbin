@@ -1,12 +1,12 @@
 export GOBIN ?= $(shell pwd)/bin
 
-GOLINT = $(GOBIN)/golint
+GOLINT = $(GOBIN)/golangci-lint run
 STATICCHECK = $(GOBIN)/staticcheck
 
 # Directories containing independent Go modules.
 #
 # We track coverage only for the main module.
-MODULE_DIRS = . internal/sets
+MODULE_DIRS = .
 
 # Many Go tools take file globs or directories as arguments instead of packages.
 GO_FILES := $(shell \
@@ -17,7 +17,7 @@ GO_FILES := $(shell \
 all: lint test
 
 .PHONY: lint
-lint: $(GOLINT) $(STATICCHECK)
+lint:
 	@rm -rf lint.log
 	@echo "Checking formatting..."
 	@gofmt -d -s $(GO_FILES) 2>&1 | tee lint.log
@@ -25,8 +25,6 @@ lint: $(GOLINT) $(STATICCHECK)
 	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go vet ./... 2>&1) &&) true | tee -a lint.log
 	@echo "Checking lint..."
 	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && $(GOLINT) ./... 2>&1) &&) true | tee -a lint.log
-	@echo "Checking staticcheck..."
-	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && $(STATICCHECK) ./... 2>&1) &&) true | tee -a lint.log
 	@echo "Checking for unresolved FIXMEs..."
 	@git grep -i fixme | grep -v -e Makefile | tee -a lint.log
 	@[ ! -s lint.log ]
@@ -36,12 +34,6 @@ lint: $(GOLINT) $(STATICCHECK)
 		echo "'go mod tidy' resulted in changes or working tree is dirty:"; \
 		git --no-pager diff; \
 	fi
-
-$(GOLINT):
-	cd tools && go install golang.org/x/lint/golint
-
-$(STATICCHECK):
-	cd tools && go install honnef.co/go/tools/cmd/staticcheck
 
 .PHONY: test
 test:
