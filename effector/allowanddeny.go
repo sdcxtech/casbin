@@ -15,14 +15,14 @@ import (
 //  - allow
 //  - deny
 func NewAllowAndDeny(effectKey string) core.Effector {
-	return &anyAllowAndDenyImpl{eftKey: effectKey}
+	return &allowAndDeny{eftKey: effectKey}
 }
 
-type anyAllowAndDenyImpl struct {
+type allowAndDeny struct {
 	eftKey string
 }
 
-func (a *anyAllowAndDenyImpl) Execute(
+func (a *allowAndDeny) Execute(
 	eval core.PolicyEvalFunc,
 	policies core.Policies,
 ) (allow bool, err error) {
@@ -30,6 +30,7 @@ func (a *anyAllowAndDenyImpl) Execute(
 		matched, _err := eval(policy)
 		if _err != nil {
 			err = _err
+
 			return
 		}
 
@@ -37,11 +38,11 @@ func (a *anyAllowAndDenyImpl) Execute(
 			eft := policy[a.eftKey]
 			if eft == EffectDeny {
 				allow = false
-				return
 			} else if eft == EffectAllow {
 				allow = true
 			}
 		}
 	}
+
 	return
 }

@@ -18,15 +18,19 @@ func newEnforceConfig(options ...EnforceOption) (enforceConfig, error) {
 	c.withRoleGraphs = make(map[string][]*graph.Graph)
 
 	err := applyEnforceConfigOptions(&c, options...)
+
 	return c, err
 }
 
 func applyEnforceConfigOptions(c *enforceConfig, options ...EnforceOption) error {
 	for _, o := range options {
 		if err := o.apply(c); err != nil {
+			err = fmt.Errorf("apply enforce option: %w", err)
+
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -44,7 +48,9 @@ func (o enforceOptionWithRoleGraphsImpl) apply(c *enforceConfig) error {
 	if c.withRoleGraphs == nil {
 		c.withRoleGraphs = make(map[string][]*graph.Graph)
 	}
+
 	c.withRoleGraphs[o.gKey] = o.graphs
+
 	return nil
 }
 
@@ -62,10 +68,12 @@ func WithRoleGraphs(gKey string, graphs ...*graph.Graph) EnforceOption {
 func UseMatcher(name string) EnforceOption {
 	return applyEnforceOptionFunc(func(c *enforceConfig) (err error) {
 		if name == "" {
-			err = fmt.Errorf("matcher name can not be empty")
+			err = ErrEmptyMatcherName
+
 			return
 		}
 		c.matcher = name
+
 		return
 	})
 }

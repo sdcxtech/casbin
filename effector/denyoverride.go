@@ -13,22 +13,24 @@ import (
 //  - allow
 //  - deny
 func NewDenyOverride(policyEffectKey string) core.Effector {
-	return &noDenyOverrideImpl{eftKey: policyEffectKey}
+	return &denyOverride{eftKey: policyEffectKey}
 }
 
-type noDenyOverrideImpl struct {
+type denyOverride struct {
 	eftKey string
 }
 
-func (e *noDenyOverrideImpl) Execute(
+func (e *denyOverride) Execute(
 	eval core.PolicyEvalFunc,
 	policies core.Policies,
 ) (allow bool, err error) {
 	allow = true
+
 	for _, policy := range policies {
 		matched, _err := eval(policy)
 		if _err != nil {
 			err = _err
+
 			return
 		}
 
@@ -36,9 +38,11 @@ func (e *noDenyOverrideImpl) Execute(
 			eft := policy[e.eftKey]
 			if eft == EffectDeny {
 				allow = false
+
 				return
 			}
 		}
 	}
+
 	return
 }

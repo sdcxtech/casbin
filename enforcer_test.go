@@ -1,9 +1,10 @@
-package casbin
+package casbin_test
 
 import (
 	"strings"
 	"testing"
 
+	"github.com/sdcxtech/casbin"
 	"github.com/sdcxtech/casbin/core"
 	"github.com/sdcxtech/casbin/effector"
 	"github.com/sdcxtech/casbin/load"
@@ -38,10 +39,10 @@ func TestEnforcer(t *testing.T) {
 
 	itr := load.NewCSVIterator(reader)
 
-	enforcer, err := NewEnforcer(m, itr)
+	enforcer, err := casbin.NewEnforcer(m, itr)
 	assert.NoError(t, err)
 
-	allow, err := enforcer.Enforce(Request("admin", "order", "get"))
+	allow, err := enforcer.Enforce(casbin.Request("admin", "order", "get"))
 	assert.NoError(t, err)
 	assert.True(t, allow)
 }

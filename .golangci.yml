@@ -19,11 +19,24 @@ linters:
     - stylecheck
     - godot
   disable:
+    # deprecated linters start
     - maligned
     - scopelint
+    - golint
+    - interfacer
+    # deprecated linters end
+    # style start
+    - gomnd
+    - exhaustivestruct
+    - paralleltest
+    - goerr113
+    - varnamelen
+    - ireturn
+    # style end
   presets:
     - bugs
     - unused
+    - style
     - performance
 
 # all available settings of specific linters
@@ -34,3 +47,5 @@ linters-settings:
     line-length: 120
     # tab width in spaces. Default to 1.
     tab-width: 4
+  nakedret:
+    max-func-lines: 30

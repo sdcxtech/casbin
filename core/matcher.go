@@ -35,6 +35,7 @@ func (m *Matcher) Program(
 		cel.Functions(funcs...),
 		cel.Globals(vars),
 	)
+
 	return
 }
 
@@ -46,8 +47,10 @@ func (m Matchers) Get(key string) (matcher Matcher, err error) {
 	matcher, ok := m.matchers[key]
 	if !ok {
 		err = fmt.Errorf("%w: %s", ErrNotFoundMatcher, key)
+
 		return
 	}
+
 	return
 }
 
@@ -60,10 +63,13 @@ type MatchersConfig struct {
 func (c MatchersConfig) New() (m Matchers, err error) {
 	if c.Roles == nil || c.Define == nil {
 		err = fmt.Errorf("must give roles schema and matcher define")
+
 		return
 	}
+
 	if len(c.Define) == 0 {
 		err = ErrAtLeastOneMatcher
+
 		return
 	}
 
@@ -81,6 +87,7 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 	}
 
 	funcs := make([]*functions.Overload, 0, len(c.ExtensionFuncs))
+
 	for _, fn := range c.ExtensionFuncs {
 		_decls = append(_decls, fn.Decl)
 		funcs = append(funcs, fn.Overload)
@@ -115,6 +122,7 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 	)
 	if err != nil {
 		err = fmt.Errorf("new cel env: %w", err)
+
 		return
 	}
 
@@ -122,8 +130,10 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 		ast, iss := env.Compile(v)
 		if iss.Err() != nil {
 			err = fmt.Errorf("compile match expression: %w", iss.Err())
+
 			return
 		}
+
 		matcher := Matcher{
 			env:   env,
 			ast:   ast,
@@ -132,5 +142,5 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 		m.matchers[key] = matcher
 	}
 
-	return
+	return m, err
 }

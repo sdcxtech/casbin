@@ -23,8 +23,8 @@ const (
 // * "_, _, _" is with domain.
 func RoleTypeFromLine(line string) (RoleType, error) {
 	ss := strings.Split(line, ",")
-	l := len(ss)
-	if l == 2 {
+
+	if l := len(ss); l == 2 {
 		return RoleTypeWithoutDomain, nil
 	} else if l == 3 {
 		return RoleTypeWithDomain, nil

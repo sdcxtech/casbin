@@ -8,6 +8,7 @@ import (
 
 func generateG(graphs []*graph.Graph, domainMatch func(string, string) bool) func(r, p, domain string) bool {
 	memorized := map[string]bool{}
+
 	return func(r, p, domain string) bool {
 		key := fmt.Sprintf("%s:%s:%s", r, p, domain)
 
@@ -19,6 +20,7 @@ func generateG(graphs []*graph.Graph, domainMatch func(string, string) bool) fun
 		if len(graphs) == 0 {
 			v = r == p
 			memorized[key] = v
+
 			return v
 		}
 
@@ -34,7 +36,9 @@ func generateG(graphs []*graph.Graph, domainMatch func(string, string) bool) fun
 				graphs...,
 			)
 		}
+
 		memorized[key] = v
+
 		return v
 	}
 }

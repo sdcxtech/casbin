@@ -1,4 +1,4 @@
-package load
+package load_test
 
 import (
 	"strings"
@@ -6,6 +6,8 @@ import (
 
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/sdcxtech/casbin/load"
 )
 
 func TestLoadModelSucceeds(t *testing.T) {
@@ -33,9 +35,8 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = ModelFromViper(v)
+		_, err = load.ModelFromViper(v)
 		assert.NoError(t, err)
-
 	}
 	{
 		conf := `
@@ -62,7 +63,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = ModelFromViper(v)
+		_, err = load.ModelFromViper(v)
 		assert.NoError(t, err)
 	}
 	{
@@ -90,7 +91,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = ModelFromViper(v)
+		_, err = load.ModelFromViper(v)
 		assert.NoError(t, err)
 	}
 }
@@ -120,7 +121,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = ModelFromViper(v)
+		_, err = load.ModelFromViper(v)
 		assert.Error(t, err)
 	}
 	{
@@ -147,7 +148,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = ModelFromViper(v)
+		_, err = load.ModelFromViper(v)
 		assert.Error(t, err)
 	}
 }
@@ -176,7 +177,7 @@ type = "allow-override"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = ModelFromViper(v)
+		_, err = load.ModelFromViper(v)
 		assert.Error(t, err)
 	}
 }

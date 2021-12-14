@@ -9,12 +9,12 @@ import (
 // The effector return allow when any matched policy is allow.
 // There is no effect column, policy is default to be allow effect.
 func NewAllowOverride() core.Effector {
-	return &allowOverrideImpl{}
+	return &allowOverride{}
 }
 
-type allowOverrideImpl struct{}
+type allowOverride struct{}
 
-func (a *allowOverrideImpl) Execute(
+func (a *allowOverride) Execute(
 	eval core.PolicyEvalFunc, policies core.Policies,
 ) (allow bool, err error) {
 	for _, policy := range policies {
@@ -27,5 +27,6 @@ func (a *allowOverrideImpl) Execute(
 			return
 		}
 	}
+
 	return
 }

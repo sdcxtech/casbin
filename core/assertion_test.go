@@ -1,22 +1,26 @@
-package core
+package core_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/sdcxtech/casbin/core"
 )
 
 func TestAssertion(t *testing.T) {
-	a, err := NewAssertionSchema("sub, obj, act")
+	a, err := core.NewAssertionSchema("sub, obj, act")
 	assert.NoError(t, err)
 
 	_, err = a.CreateAssertion([]string{"charlie", "order", "get"})
 	assert.NoError(t, err)
+
 	_, err = a.CreateAssertion([]string{"charlie", "order", "get", "foobar"})
 	assert.Error(t, err)
 
-	_, err = NewAssertionSchema("sub,obj")
+	_, err = core.NewAssertionSchema("sub,obj")
 	assert.Error(t, err)
-	_, err = NewAssertionSchema("sub,,act")
+
+	_, err = core.NewAssertionSchema("sub,,act")
 	assert.Error(t, err)
 }

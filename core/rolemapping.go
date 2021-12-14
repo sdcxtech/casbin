@@ -36,12 +36,14 @@ func (rg *RoleMapping) GenerateGFunc(moreGraphs ...*graph.Graph) (overload *func
 	graphs = append(graphs, rg.graph)
 
 	fn := generateG(graphs, rg.domainMatch)
+
 	if rg.domainMatch == nil {
 		f := func(lhs, rhs ref.Val) ref.Val {
 			v1, ok := lhs.(types.String)
 			if !ok {
 				return types.NewErr("first arg: wrong args type: expect string got %v", lhs.Type().TypeName())
 			}
+
 			v2, ok := rhs.(types.String)
 			if !ok {
 				return types.NewErr("second arg: wrong args type: expect string got %v", rhs.Type().TypeName())
@@ -61,16 +63,19 @@ func (rg *RoleMapping) GenerateGFunc(moreGraphs ...*graph.Graph) (overload *func
 			if !ok {
 				return types.NewErr("first arg: wrong args type: expect string got %v", values[0].Type().TypeName())
 			}
+
 			v2, ok := values[1].(types.String)
 			if !ok {
 				return types.NewErr("second arg: wrong args type: expect string got %v", values[1].Type().TypeName())
 			}
+
 			v3, ok := values[2].(types.String)
 			if !ok {
 				return types.NewErr("third arg: wrong args type: expect string got %v", values[2].Type().TypeName())
 			}
 
 			matched := fn(string(v1), string(v2), string(v3))
+
 			return types.Bool(matched)
 		}
 		overload = &functions.Overload{
@@ -78,7 +83,8 @@ func (rg *RoleMapping) GenerateGFunc(moreGraphs ...*graph.Graph) (overload *func
 			Function: f,
 		}
 	}
-	return
+
+	return overload
 }
 
 type RoleMappings map[string]*RoleMapping
@@ -91,12 +97,14 @@ func (rg RoleMappings) GenerateGFuncs(
 	}
 
 	funcs = make([]*functions.Overload, 0, len(rg))
+
 	for _, rg := range rg {
 		key := rg.Key()
 		graphs := moreGraphs[key]
 		overload := rg.GenerateGFunc(graphs...)
 		funcs = append(funcs, overload)
 	}
+
 	return
 }
 
@@ -104,9 +112,12 @@ func (rg RoleMappings) SetDomainMatchFuncion(key string, domainMatch ManagerDoma
 	g, ok := rg[key]
 	if !ok {
 		err = fmt.Errorf("not found role group with key: %s", key)
+
 		return
 	}
+
 	g.domainMatch = domainMatch
+
 	return
 }
 

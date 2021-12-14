@@ -16,5 +16,6 @@ func KeyMatch(key1 string, key2 string) (bool, error) {
 	if len(key1) > i {
 		return key1[:i] == key2[:i], nil
 	}
+
 	return key1 == key2[:i], nil
 }

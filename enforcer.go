@@ -36,6 +36,7 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 	rVar, err := e.model.Request().CreateAssertion(requestValues)
 	if err != nil {
 		err = fmt.Errorf("convert request vals: %w", err)
+
 		return
 	}
 
@@ -48,6 +49,7 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 	)
 	if err != nil {
 		err = fmt.Errorf("new program: %w", err)
+
 		return
 	}
 
@@ -55,23 +57,33 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 
 	policyEval := func(policy core.Assertion) (allow bool, err error) {
 		vars["p"] = policy
+
 		result, _ /*details*/, _err := prg.Eval(vars)
+
 		if _err != nil {
 			err = _err
+
 			return
 		}
 
-		allow = result.Value().(bool)
+		allow, ok := result.Value().(bool)
+		if !ok {
+			err = fmt.Errorf("eval result should be bool type, but got %s", result.Type().TypeName())
+
+			return
+		}
+
 		return
 	}
 
 	allow, err = e.model.Effector().Execute(policyEval, e.policies)
 	if err != nil {
 		err = fmt.Errorf("effector execute: %w", err)
+
 		return
 	}
 
-	return
+	return allow, err
 }
 
 // NewEnforcer new an enforcer by a model and a policy iterator.
@@ -82,6 +94,7 @@ func NewEnforcer(
 	policies, roles, err := model.Load(policyItr)
 	if err != nil {
 		err = fmt.Errorf("new enforcer: %w", err)
+
 		return
 	}
 
@@ -90,5 +103,6 @@ func NewEnforcer(
 		policies:     policies,
 		roleMappings: roles,
 	}
+
 	return
 }

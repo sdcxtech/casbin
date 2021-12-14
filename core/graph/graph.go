@@ -24,14 +24,18 @@ func (g *Graph) HasLink(
 	foundNodes := sets.NewString(src...)
 	if foundNodes.Has(dst) {
 		hasLink = true
+
 		return
 	}
+
 	srcLen := len(src)
 	jobs := make([]string, srcLen, srcLen+16)
 	copy(jobs, src)
+
 	for i := 0; i < len(jobs); i++ {
 		src := jobs[i]
 		edges, ok := g.edges[src]
+
 		if ok {
 			for _, edge := range edges {
 				if domainMatch != nil && !domainMatch(edge.domain) {
@@ -42,6 +46,7 @@ func (g *Graph) HasLink(
 				if !foundNodes.Has(next) {
 					if next == dst {
 						hasLink = true
+
 						return
 					}
 
@@ -51,8 +56,10 @@ func (g *Graph) HasLink(
 			}
 		}
 	}
+
 	reached = foundNodes.UnsortedList()
-	return
+
+	return hasLink, reached
 }
 
 func (g *Graph) AddEdge(src, dst, domain string) {
@@ -70,6 +77,7 @@ func New() (g *Graph) {
 	g = &Graph{
 		edges: make(map[string][]*graphEdge),
 	}
+
 	return
 }
 
@@ -94,5 +102,6 @@ func HasLink(
 			return
 		}
 	}
+
 	return
 }

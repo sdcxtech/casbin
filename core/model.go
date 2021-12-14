@@ -30,6 +30,7 @@ func NewModel(
 		effector: effector,
 		matchers: matchers,
 	}
+
 	return
 }
 
@@ -70,20 +71,24 @@ func (m *Model) Load(itr LoadIterator) (
 		ok, key, vals := itr.Next()
 		if !ok {
 			err = itr.Error()
-			break
+
+			return
 		}
 
 		if key == "p" {
 			o, _err := m.policy.CreateAssertion(vals)
 			if _err != nil {
 				err = fmt.Errorf("load policy: %w", _err)
+
 				return
 			}
+
 			policies = append(policies, o)
 		} else {
 			rType, ok := m.roles[key]
 			if !ok {
 				err = fmt.Errorf("unknown assertion key: %s", key)
+
 				return
 			}
 			rg := roleMappings[key]
@@ -92,6 +97,7 @@ func (m *Model) Load(itr LoadIterator) (
 			if rType == RoleTypeWithDomain {
 				if len(vals) != 3 {
 					err = fmt.Errorf("invalid role assertion: %s: %s", key, strings.Join(vals, ","))
+
 					return
 				}
 				src = vals[0]
@@ -100,6 +106,7 @@ func (m *Model) Load(itr LoadIterator) (
 			} else {
 				if len(vals) != 2 {
 					err = fmt.Errorf("invalid role assertion: %s: %s", key, strings.Join(vals, ","))
+
 					return
 				}
 				src = vals[0]
@@ -109,6 +116,4 @@ func (m *Model) Load(itr LoadIterator) (
 			rg.graph.AddEdge(src, dst, domain)
 		}
 	}
-
-	return
 }

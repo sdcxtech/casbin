@@ -36,7 +36,7 @@ const (
 //
 //      [matchers]
 //      m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
-func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Model, err error) {
+func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, err error) {
 	optionConf, err := newLoadModelConfig(options...)
 	if err != nil {
 		return
@@ -45,12 +45,14 @@ func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Mod
 	request, err := core.NewAssertionSchema(v.GetString("request_definition.r"))
 	if err != nil {
 		err = fmt.Errorf("request_definition.r: %w", err)
+
 		return
 	}
 
 	policy, err := core.NewAssertionSchema(v.GetString("policy_definition.p"))
 	if err != nil {
 		err = fmt.Errorf("policy_definition.p: %w", err)
+
 		return
 	}
 
@@ -61,8 +63,10 @@ func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Mod
 		roleType, _err := core.RoleTypeFromLine(v)
 		if _err != nil {
 			err = _err
+
 			return
 		}
+
 		rolesSchema[key] = roleType
 	}
 
@@ -70,12 +74,14 @@ func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Mod
 	eftKey := v.GetString("policy_effect.key")
 
 	var eft core.Effector
+
 	switch eftType {
 	case EffectorAllowOverride:
 		eft = effector.NewAllowOverride()
 	case EffectorDenyOverride:
 		if eftKey == "" || !policy.Has(eftKey) {
 			err = fmt.Errorf("policy effect: must give an effect field key")
+
 			return
 		}
 
@@ -83,6 +89,7 @@ func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Mod
 	case EffectorAllowAndDeny:
 		if eftKey == "" || !policy.Has(eftKey) {
 			err = fmt.Errorf("policy effect: must give an effect field key")
+
 			return
 		}
 
@@ -90,6 +97,7 @@ func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Mod
 	default:
 		err = fmt.Errorf("unknown effector: %s", eftType)
 	}
+
 	if err != nil {
 		return
 	}
@@ -102,10 +110,12 @@ func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Mod
 		ExtensionFuncs: optionConf.extensionFuncs,
 	}.New()
 	if err != nil {
+		err = fmt.Errorf("new matchers: %w", err)
+
 		return
 	}
 
 	model = core.NewModel(policy, request, rolesSchema, eft, matchers)
 
-	return
+	return model, err
 }

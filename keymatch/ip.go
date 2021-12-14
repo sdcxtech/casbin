@@ -1,7 +1,7 @@
 package keymatch
 
 import (
-	"fmt"
+	"errors"
 	"net"
 )
 
@@ -11,16 +11,19 @@ import (
 func IPMatch(ip string, ipCIDR string) (matched bool, err error) {
 	objIP1 := net.ParseIP(ip)
 	if objIP1 == nil {
-		err = fmt.Errorf("argument 1 is not a valid IP address")
+		err = errors.New("argument 1 is not a valid IP address")
+
 		return
 	}
 
 	_, cidr, err := net.ParseCIDR(ipCIDR)
 	if err != nil {
-		err = fmt.Errorf("argument 1 is not a valid IP CIDR address")
+		err = errors.New("argument 1 is not a valid IP CIDR address")
+
 		return
 	}
 
 	matched = cidr.Contains(objIP1)
+
 	return
 }

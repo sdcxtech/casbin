@@ -1,9 +1,10 @@
-package load
+package load_test
 
 import (
 	"strings"
 	"testing"
 
+	"github.com/sdcxtech/casbin/load"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,11 +18,14 @@ func TestCSVIterator(t *testing.T) {
     `
 	reader := strings.NewReader(csvContent)
 
-	itr := NewCSVIterator(reader)
+	itr := load.NewCSVIterator(reader)
 
-	var ok bool
-	var key string
-	var vals []string
+	var (
+		ok   bool
+		key  string
+		vals []string
+	)
+
 	ok, key, vals = itr.Next()
 	assert.True(t, ok)
 	assert.Equal(t, "p1", key)

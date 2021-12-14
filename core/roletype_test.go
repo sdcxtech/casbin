@@ -1,20 +1,22 @@
-package core
+package core_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/sdcxtech/casbin/core"
 )
 
 func TestRoleType(t *testing.T) {
-	c, err := RoleTypeFromLine("_, _,_")
+	c, err := core.RoleTypeFromLine("_, _,_")
 	assert.NoError(t, err)
-	assert.Equal(t, RoleTypeWithDomain, c)
+	assert.Equal(t, core.RoleTypeWithDomain, c)
 
-	c, err = RoleTypeFromLine("_, _")
+	c, err = core.RoleTypeFromLine("_, _")
 	assert.NoError(t, err)
-	assert.Equal(t, RoleTypeWithoutDomain, c)
+	assert.Equal(t, core.RoleTypeWithoutDomain, c)
 
-	_, err = RoleTypeFromLine("_,_,_,_")
+	_, err = core.RoleTypeFromLine("_,_,_,_")
 	assert.Error(t, err)
 }
