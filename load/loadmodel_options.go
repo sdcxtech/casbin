@@ -6,6 +6,7 @@ type loadModelConfig struct {
 	extensionFuncs []core.ExtensionFunc
 }
 
+// An option configures a new model when load it.
 type LoadModelOption interface {
 	apply(*loadModelConfig) error
 }

@@ -7,6 +7,7 @@ import (
 
 type RolesSchema map[string]RoleType
 
+// Model is casbin model schema.
 type Model struct {
 	policy   AssertionSchema
 	request  AssertionSchema
@@ -15,6 +16,7 @@ type Model struct {
 	matchers Matchers
 }
 
+// NewModel constructes a new Model.
 func NewModel(
 	policy, request AssertionSchema,
 	roles RolesSchema,
@@ -31,22 +33,29 @@ func NewModel(
 	return
 }
 
+// Policy returns the policy assertion schema.
 func (m *Model) Policy() AssertionSchema {
 	return m.policy
 }
 
+// Request returns the request assertion schema.
 func (m *Model) Request() AssertionSchema {
 	return m.request
 }
 
+// Request returns the matcherx.
 func (m *Model) Matchers() Matchers {
 	return m.matchers
 }
 
+// Effector returns the effector.
 func (m *Model) Effector() Effector {
 	return m.effector
 }
 
+// Load load and returns the policies and role mappings by an assertion iterator.
+//
+// Load would check the loaded data if it is matched with the model.
 func (m *Model) Load(itr AssertionIterator) (
 	policies Policies, roleMappings RoleMappings, err error,
 ) {

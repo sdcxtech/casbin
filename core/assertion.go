@@ -5,16 +5,23 @@ import (
 	"strings"
 )
 
+// AssertionSchema is assertion schema definition.
+//
+// Define the fields that the assertion has.
 type AssertionSchema struct {
 	indexToKey map[int]string
 	keyToIndex map[string]int
 }
 
+// Has returns if the assertion schema has a field with the specified key.
 func (s *AssertionSchema) Has(key string) bool {
 	_, ok := s.keyToIndex[key]
 	return ok
 }
 
+// CreateAssertion creates an assertion.
+//
+// CreateAssertion would verify if the input vals is matched with the schema.
 func (s AssertionSchema) CreateAssertion(vals []string) (assertion Assertion, err error) {
 	expectCount := len(s.indexToKey)
 	gotCount := len(vals)
@@ -30,6 +37,7 @@ func (s AssertionSchema) CreateAssertion(vals []string) (assertion Assertion, er
 	return
 }
 
+// NewAssertionSchema constructes an assertion schema from a casbin definition line.
 func NewAssertionSchema(line string) (a AssertionSchema, err error) {
 	subs := strings.Split(line, ",")
 	if len(subs) < 3 {
@@ -59,6 +67,7 @@ func NewAssertionSchema(line string) (a AssertionSchema, err error) {
 	return
 }
 
+// The iterator interface for loading policies and role mappings.
 type AssertionIterator interface {
 	Next() (ok bool, key string, vals []string)
 	Error() (err error)
@@ -66,4 +75,5 @@ type AssertionIterator interface {
 
 type Policies []Assertion
 
+// Assertion is an assertion. May be a request or a policy.
 type Assertion map[string]string
