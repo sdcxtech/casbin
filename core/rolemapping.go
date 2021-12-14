@@ -10,7 +10,7 @@ import (
 	"github.com/sdcxtech/casbin/core/graph"
 )
 
-type ManagerDomainMatchFunc func(string, string) bool
+type ManagerDomainMatchFunc func(request string, mapping string) (matched bool)
 
 type RoleMapping struct {
 	key         string
@@ -110,6 +110,6 @@ func (rg RoleMappings) SetDomainMatchFuncion(key string, domainMatch ManagerDoma
 	return
 }
 
-func DefaultRoleDomainMatch(key1, key2 string) bool {
-	return key1 == key2
+func RoleDomainMatchEqual(request, mapping string) bool {
+	return request == mapping
 }

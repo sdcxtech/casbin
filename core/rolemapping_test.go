@@ -15,7 +15,7 @@ func TestRoleMapping(t *testing.T) {
 	assert.True(t, ok)
 	assert.False(t, link)
 
-	g.domainMatch = DefaultRoleDomainMatch
+	g.domainMatch = RoleDomainMatchEqual
 	overload = g.GenerateGFunc()
 	result = overload.Function(types.String("a"), types.String("b"), types.String("x"))
 	link, ok = result.Value().(bool)
@@ -33,11 +33,11 @@ func TestRoleMappings(t *testing.T) {
 	rg["g"] = NewRoleMapping("g")
 
 	{
-		err := rg.SetDomainMatchFuncion("g", DefaultRoleDomainMatch)
+		err := rg.SetDomainMatchFuncion("g", RoleDomainMatchEqual)
 		assert.NoError(t, err)
 	}
 	{
-		err := rg.SetDomainMatchFuncion("g1", DefaultRoleDomainMatch)
+		err := rg.SetDomainMatchFuncion("g1", RoleDomainMatchEqual)
 		assert.Error(t, err)
 	}
 

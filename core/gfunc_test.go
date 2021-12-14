@@ -20,7 +20,7 @@ func TestGenerateG(t *testing.T) {
 	assert.True(t, fn("a", "b", ""))
 	assert.False(t, fn("a", "c", ""))
 
-	fn = generateG([]*graph.Graph{g}, DefaultRoleDomainMatch)
+	fn = generateG([]*graph.Graph{g}, RoleDomainMatchEqual)
 	assert.True(t, fn("a", "b", "x"))
 	assert.False(t, fn("a", "b", ""))
 }
