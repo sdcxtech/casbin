@@ -10,9 +10,9 @@ type LoadModelOption interface {
 	apply(*loadModelConfig) error
 }
 
-type LoadModelOptionFunc func(c *loadModelConfig) error
+type loadModelOptionFunc func(c *loadModelConfig) error
 
-func (f LoadModelOptionFunc) apply(c *loadModelConfig) error {
+func (f loadModelOptionFunc) apply(c *loadModelConfig) error {
 	return f(c)
 }
 
@@ -33,7 +33,7 @@ func applyLoadModelConfigOptions(c *loadModelConfig, options ...LoadModelOption)
 }
 
 func ExtensionFuncs(funcs ...core.ExtensionFunc) LoadModelOption {
-	return LoadModelOptionFunc(func(c *loadModelConfig) error {
+	return loadModelOptionFunc(func(c *loadModelConfig) error {
 		c.extensionFuncs = funcs
 		return nil
 	})

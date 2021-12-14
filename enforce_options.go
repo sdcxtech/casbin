@@ -6,9 +6,9 @@ import (
 	"github.com/sdcxtech/casbin/core/graph"
 )
 
-type ApplyEnforceOptionFunc func(c *enforceConfig) error
+type applyEnforceOptionFunc func(c *enforceConfig) error
 
-func (f ApplyEnforceOptionFunc) apply(c *enforceConfig) error {
+func (f applyEnforceOptionFunc) apply(c *enforceConfig) error {
 	return f(c)
 }
 
@@ -59,7 +59,7 @@ func WithRoleGraphs(gKey string, graphs ...*graph.Graph) EnforceOption {
 
 // UseMatcher use the specified matcher instead of the default matcher named 'm'.
 func UseMatcher(name string) EnforceOption {
-	return ApplyEnforceOptionFunc(func(c *enforceConfig) (err error) {
+	return applyEnforceOptionFunc(func(c *enforceConfig) (err error) {
 		if name == "" {
 			err = fmt.Errorf("matcher name can not be empty")
 			return
