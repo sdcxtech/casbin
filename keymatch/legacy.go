@@ -5,7 +5,8 @@ import (
 )
 
 // KeyMatch determines whether key1 matches the pattern of key2 (similar to RESTful path), key2 can contain a *.
-// For example, "/foo/bar" matches "/foo/*"
+//
+// For example, "/foo/bar" matches "/foo/*".
 func KeyMatch(key1 string, key2 string) (bool, error) {
 	i := strings.Index(key2, "*")
 	if i == -1 {

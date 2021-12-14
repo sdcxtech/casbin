@@ -30,7 +30,7 @@ func applyEnforceConfigOptions(c *enforceConfig, options ...EnforceOption) error
 	return nil
 }
 
-// An option for calling enforce on an enforcer.
+// EnforceOption is an option for calling enforce on an enforcer.
 type EnforceOption interface {
 	apply(*enforceConfig) error
 }

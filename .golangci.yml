@@ -17,6 +17,7 @@ linters:
     - gosimple
     - misspell
     - stylecheck
+    - godot
   disable:
     - maligned
     - scopelint

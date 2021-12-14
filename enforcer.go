@@ -21,7 +21,7 @@ type enforceConfig struct {
 	matcher        string
 }
 
-// Enforce check if the requested permissions assertion is allowed
+// Enforce check if the requested permissions assertion is allowed.
 func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (allow bool, err error) {
 	conf, err := newEnforceConfig(options...)
 	if err != nil {

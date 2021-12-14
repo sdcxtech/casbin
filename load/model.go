@@ -21,22 +21,21 @@ const (
 //
 // TOML format example:
 //
-// [request_definition]
-// r = "sub, dom, obj, act"
-
-// [policy_definition]
-// p = "sub, obj, act"
-
-// [role_definition]
-// g =  "_, _, _"
-// g1 = "_, _"
-
-// [policy_effect]
-// type = "allow-override"
-
-// [matchers]
-// m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
+//      [request_definition]
+//      r = "sub, dom, obj, act"
 //
+//      [policy_definition]
+//      p = "sub, obj, act"
+//
+//      [role_definition]
+//      g =  "_, _, _"
+//      g1 = "_, _"
+//
+//      [policy_effect]
+//      type = "allow-override"
+//
+//      [matchers]
+//      m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 func ModelFromViper(v *viper.Viper, options ...LoadModelOption) (model *core.Model, err error) {
 	optionConf, err := newLoadModelConfig(options...)
 	if err != nil {
