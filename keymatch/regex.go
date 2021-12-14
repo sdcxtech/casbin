@@ -7,7 +7,7 @@ import (
 )
 
 // NewRegexMatch build a regex match function.
-func NewRegexMatch() KeyMatchFunc {
+func NewRegexMatch() Func {
 	memorized := &sync.Map{}
 
 	return func(key1 string, pattern string) (matched bool, err error) {

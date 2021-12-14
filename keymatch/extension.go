@@ -13,9 +13,9 @@ import (
 )
 
 // Key match function signature.
-type KeyMatchFunc func(key1, key2 string) (matched bool, err error)
+type Func func(key1, key2 string) (matched bool, err error)
 
-func ToExtensionFunc(funcName string, fn KeyMatchFunc) core.ExtensionFunc {
+func ToExtensionFunc(funcName string, fn Func) core.ExtensionFunc {
 	return core.ExtensionFunc{
 		Decl: decls.NewFunction(funcName, decls.NewParameterizedOverload(
 			fmt.Sprintf("key_match_%s", funcName),
@@ -30,7 +30,7 @@ func ToExtensionFunc(funcName string, fn KeyMatchFunc) core.ExtensionFunc {
 	}
 }
 
-func celKeyMatchFunc(fn KeyMatchFunc) functions.BinaryOp {
+func celKeyMatchFunc(fn Func) functions.BinaryOp {
 	return func(lhs ref.Val, rhs ref.Val) ref.Val {
 		if lhs.Type().TypeName() != types.StringType.TypeName() {
 			return types.NewErr("invalid arguments: key must be string type: key 1")
