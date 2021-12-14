@@ -33,7 +33,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = LoadModel(v)
+		_, err = ModelFromViper(v)
 		assert.NoError(t, err)
 
 	}
@@ -62,7 +62,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = LoadModel(v)
+		_, err = ModelFromViper(v)
 		assert.NoError(t, err)
 	}
 	{
@@ -90,7 +90,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = LoadModel(v)
+		_, err = ModelFromViper(v)
 		assert.NoError(t, err)
 	}
 }
@@ -120,7 +120,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = LoadModel(v)
+		_, err = ModelFromViper(v)
 		assert.Error(t, err)
 	}
 	{
@@ -147,7 +147,7 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = LoadModel(v)
+		_, err = ModelFromViper(v)
 		assert.Error(t, err)
 	}
 }
@@ -176,7 +176,7 @@ type = "allow-override"
 		err := v.ReadConfig(strings.NewReader(conf))
 		assert.NoError(t, err)
 
-		_, err = LoadModel(v)
+		_, err = ModelFromViper(v)
 		assert.Error(t, err)
 	}
 }
