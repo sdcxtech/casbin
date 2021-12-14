@@ -1,4 +1,4 @@
-package core
+package keymatch
 
 import (
 	"fmt"
@@ -8,12 +8,14 @@ import (
 	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/interpreter/functions"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
+
+	"github.com/sdcxtech/casbin/core"
 )
 
 type KeyMatchFunc func(key1, key2 string) (matched bool, err error)
 
-func KeyMatchToExtensionFunc(funcName string, fn KeyMatchFunc) ExtensionFunc {
-	return ExtensionFunc{
+func ToExtensionFunc(funcName string, fn KeyMatchFunc) core.ExtensionFunc {
+	return core.ExtensionFunc{
 		Decl: decls.NewFunction(funcName, decls.NewParameterizedOverload(
 			fmt.Sprintf("key_match_%s", funcName),
 			[]*exprpb.Type{decls.String, decls.String},

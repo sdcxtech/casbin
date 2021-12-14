@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"regexp"
 	"sync"
-
-	"github.com/sdcxtech/casbin/core"
 )
 
-func NewRegexMatch() core.KeyMatchFunc {
+func NewRegexMatch() KeyMatchFunc {
 	memorized := &sync.Map{}
 
 	return func(key1 string, pattern string) (matched bool, err error) {
