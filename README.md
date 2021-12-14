@@ -2,7 +2,7 @@
 
 Another [casbin](https://casbin.org/) implementation in golang.
 
-## Diffrent with the official casbin implementation
+## Difference with the official casbin implementation
 
 * Use google [Common Expression Language](https://github.com/google/cel-go) as the matcher expression language.
 * Assertion field in policy and request only can be `string` type. So there is no support for `ABAC` model.
