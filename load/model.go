@@ -38,7 +38,7 @@ const (
 // m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 //
 func LoadModel(v *viper.Viper, options ...LoadModelOption) (model *core.Model, err error) {
-	optionConf, err := newLoadModelConfig()
+	optionConf, err := newLoadModelConfig(options...)
 	if err != nil {
 		return
 	}
