@@ -32,7 +32,7 @@ func applyLoadModelConfigOptions(c *loadModelConfig, options ...LoadModelOption)
 	return nil
 }
 
-func ExtensionFuncs(funcs []core.ExtensionFunc) LoadModelOption {
+func ExtensionFuncs(funcs ...core.ExtensionFunc) LoadModelOption {
 	return LoadModelOptionFunc(func(c *loadModelConfig) error {
 		c.extensionFuncs = funcs
 		return nil
