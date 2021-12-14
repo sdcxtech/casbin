@@ -10,7 +10,7 @@ import (
 )
 
 // NewCSVIterator constructs an iterator that load CSV data from an io.Reader.
-func NewCSVIterator(ioReader io.Reader) (itr core.AssertionIterator) {
+func NewCSVIterator(ioReader io.Reader) (itr core.LoadIterator) {
 	reader := csv.NewReader(ioReader)
 	reader.FieldsPerRecord = -1
 	reader.TrimLeadingSpace = true

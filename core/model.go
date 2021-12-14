@@ -56,7 +56,7 @@ func (m *Model) Effector() Effector {
 // Load load and returns the policies and role mappings by an assertion iterator.
 //
 // Load would check the loaded data if it is matched with the model.
-func (m *Model) Load(itr AssertionIterator) (
+func (m *Model) Load(itr LoadIterator) (
 	policies Policies, roleMappings RoleMappings, err error,
 ) {
 	policies = make([]Assertion, 0)

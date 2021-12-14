@@ -67,12 +67,6 @@ func NewAssertionSchema(line string) (a AssertionSchema, err error) {
 	return
 }
 
-// The iterator interface for loading policies and role mappings.
-type AssertionIterator interface {
-	Next() (ok bool, key string, vals []string)
-	Error() (err error)
-}
-
 type Policies []Assertion
 
 // Assertion is an assertion. May be a request or a policy.

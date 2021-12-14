@@ -76,7 +76,7 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 // NewEnforcer new an enforcer by a model and a policy iterator.
 func NewEnforcer(
 	model *core.Model,
-	policyItr core.AssertionIterator,
+	policyItr core.LoadIterator,
 ) (enforcer *Enforcer, err error) {
 	policies, roles, err := model.Load(policyItr)
 	if err != nil {
