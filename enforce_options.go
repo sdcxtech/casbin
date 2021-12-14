@@ -57,6 +57,7 @@ func WithRoleGraphs(gKey string, graphs ...*graph.Graph) EnforceOption {
 	}
 }
 
+// UseMatcher use the specified matcher instead of the default matcher named 'm'.
 func UseMatcher(name string) EnforceOption {
 	return ApplyEnforceOptionFunc(func(c *enforceConfig) (err error) {
 		if name == "" {

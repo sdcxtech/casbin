@@ -12,6 +12,7 @@ import (
 	"github.com/sdcxtech/casbin/core"
 )
 
+// Key match function signature.
 type KeyMatchFunc func(key1, key2 string) (matched bool, err error)
 
 func ToExtensionFunc(funcName string, fn KeyMatchFunc) core.ExtensionFunc {

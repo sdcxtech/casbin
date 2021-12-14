@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// NewRegexMatch build a regex match function.
 func NewRegexMatch() KeyMatchFunc {
 	memorized := &sync.Map{}
 
