@@ -2,8 +2,11 @@ package keymatch
 
 import (
 	"errors"
+	"fmt"
 	"net"
 )
+
+var ErrInvalidIP = errors.New("invalid textual representation of an IP address")
 
 // IPMatch determines whether IP address 'ip' matches the IP CIDR pattern.
 //
@@ -11,14 +14,14 @@ import (
 func IPMatch(ip string, ipCIDR string) (matched bool, err error) {
 	objIP1 := net.ParseIP(ip)
 	if objIP1 == nil {
-		err = errors.New("argument 1 is not a valid IP address")
+		err = fmt.Errorf("argument 1: %w", ErrInvalidIP)
 
 		return
 	}
 
 	_, cidr, err := net.ParseCIDR(ipCIDR)
 	if err != nil {
-		err = errors.New("argument 1 is not a valid IP CIDR address")
+		err = fmt.Errorf("argument 2: %w", err)
 
 		return
 	}

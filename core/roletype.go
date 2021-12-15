@@ -30,5 +30,5 @@ func RoleTypeFromLine(line string) (RoleType, error) {
 		return RoleTypeWithDomain, nil
 	}
 
-	return RoleTypeInvalid, fmt.Errorf("invalid role definition: %s", line)
+	return RoleTypeInvalid, fmt.Errorf("%w: %s", ErrInvalidRoleTypeDefinition, line)
 }

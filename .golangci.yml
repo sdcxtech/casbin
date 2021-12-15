@@ -29,7 +29,6 @@ linters:
     - gomnd
     - exhaustivestruct
     - paralleltest
-    - goerr113
     - varnamelen
     - ireturn
     # style end

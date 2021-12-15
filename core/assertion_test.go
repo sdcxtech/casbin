@@ -18,7 +18,7 @@ func TestAssertion(t *testing.T) {
 	_, err = a.CreateAssertion([]string{"charlie", "order", "get", "foobar"})
 	assert.Error(t, err)
 
-	_, err = core.NewAssertionSchema("sub,obj")
+	_, err = core.NewAssertionSchema("sub")
 	assert.Error(t, err)
 
 	_, err = core.NewAssertionSchema("sub,,act")

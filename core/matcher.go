@@ -61,14 +61,14 @@ type MatchersConfig struct {
 }
 
 func (c MatchersConfig) New() (m Matchers, err error) {
-	if c.Roles == nil || c.Define == nil {
-		err = fmt.Errorf("must give roles schema and matcher define")
+	if c.Roles == nil {
+		err = fmt.Errorf("%w: must give Roles", ErrInvalidMatchersConfig)
 
 		return
 	}
 
 	if len(c.Define) == 0 {
-		err = ErrAtLeastOneMatcher
+		err = fmt.Errorf("%w: must give at least one matcher definition", ErrInvalidMatchersConfig)
 
 		return
 	}

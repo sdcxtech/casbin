@@ -80,7 +80,7 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 		eft = effector.NewAllowOverride()
 	case EffectorDenyOverride:
 		if eftKey == "" || !policy.Has(eftKey) {
-			err = fmt.Errorf("policy effect: must give an effect field key")
+			err = fmt.Errorf("%w: %s", ErrNeedEffectFieldKey, eftType)
 
 			return
 		}
@@ -88,14 +88,14 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 		eft = effector.NewDenyOverride(eftKey)
 	case EffectorAllowAndDeny:
 		if eftKey == "" || !policy.Has(eftKey) {
-			err = fmt.Errorf("policy effect: must give an effect field key")
+			err = fmt.Errorf("%w: %s", ErrNeedEffectFieldKey, eftType)
 
 			return
 		}
 
 		eft = effector.NewAllowAndDeny(eftKey)
 	default:
-		err = fmt.Errorf("unknown effector: %s", eftType)
+		err = fmt.Errorf("%w: %s", ErrUnknownEffectType, eftType)
 	}
 
 	if err != nil {

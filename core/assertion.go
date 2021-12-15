@@ -26,7 +26,7 @@ func (s *AssertionSchema) Has(key string) bool {
 func (s AssertionSchema) CreateAssertion(vals []string) (assertion Assertion, err error) {
 	gotCount := len(vals)
 	if expectCount := len(s.indexToKey); expectCount != gotCount {
-		err = fmt.Errorf("invalid values count: expect %d got %d", expectCount, gotCount)
+		err = fmt.Errorf("%w: expect %d got %d", ErrInvalidAssertion, expectCount, gotCount)
 
 		return
 	}
@@ -42,8 +42,8 @@ func (s AssertionSchema) CreateAssertion(vals []string) (assertion Assertion, er
 // NewAssertionSchema constructes an assertion schema from a casbin definition line.
 func NewAssertionSchema(line string) (schema AssertionSchema, err error) {
 	subs := strings.Split(line, ",")
-	if len(subs) < 3 {
-		err = fmt.Errorf("%w: at least 3 column", ErrInvalidAssertionSchema)
+	if len(subs) < 2 {
+		err = fmt.Errorf("%w: at least 2 field", ErrInvalidAssertionSchema)
 
 		return
 	}

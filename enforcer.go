@@ -68,7 +68,11 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 
 		allow, ok := result.Value().(bool)
 		if !ok {
-			err = fmt.Errorf("eval result should be bool type, but got %s", result.Type().TypeName())
+			err = fmt.Errorf(
+				"%w: eval result should be bool type, but got %s",
+				core.ErrUnexpectedEvalResult,
+				result.Type().TypeName(),
+			)
 
 			return
 		}

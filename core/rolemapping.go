@@ -111,7 +111,7 @@ func (rg RoleMappings) GenerateGFuncs(
 func (rg RoleMappings) SetDomainMatchFuncion(key string, domainMatch ManagerDomainMatchFunc) (err error) {
 	g, ok := rg[key]
 	if !ok {
-		err = fmt.Errorf("not found role group with key: %s", key)
+		err = fmt.Errorf("%w: %s", ErrNotFoundSpecifiedRoleMappingGroup, key)
 
 		return
 	}

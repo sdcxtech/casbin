@@ -87,7 +87,7 @@ func (m *Model) Load(itr LoadIterator) (
 		} else {
 			rType, ok := m.roles[key]
 			if !ok {
-				err = fmt.Errorf("unknown assertion key: %s", key)
+				err = fmt.Errorf("%w: %s", ErrUnknownAssertionType, key)
 
 				return
 			}
@@ -96,7 +96,7 @@ func (m *Model) Load(itr LoadIterator) (
 			var src, dst, domain string
 			if rType == RoleTypeWithDomain {
 				if len(vals) != 3 {
-					err = fmt.Errorf("invalid role assertion: %s: %s", key, strings.Join(vals, ","))
+					err = fmt.Errorf("%w: %s, %s", ErrRoleMappingMismatchRoleType, key, strings.Join(vals, ","))
 
 					return
 				}
@@ -105,7 +105,7 @@ func (m *Model) Load(itr LoadIterator) (
 				domain = vals[2]
 			} else {
 				if len(vals) != 2 {
-					err = fmt.Errorf("invalid role assertion: %s: %s", key, strings.Join(vals, ","))
+					err = fmt.Errorf("%w: %s, %s", ErrRoleMappingMismatchRoleType, key, strings.Join(vals, ","))
 
 					return
 				}
