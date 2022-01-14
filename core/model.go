@@ -5,7 +5,12 @@ import (
 	"strings"
 )
 
-type RolesSchema map[string]RoleType
+type RoleSchema struct {
+	Type            RoleType
+	DomainMatchFunc RoleDomainMatchFunc
+}
+
+type RolesSchema map[string]RoleSchema
 
 // Model is casbin model schema.
 type Model struct {
@@ -63,8 +68,8 @@ func (m *Model) Load(itr LoadIterator) (
 	policies = make([]Assertion, 0)
 	roleMappings = make(map[string]*RoleMapping)
 
-	for key := range m.roles {
-		roleMappings[key] = NewRoleMapping(key)
+	for key, schema := range m.roles {
+		roleMappings[key] = NewRoleMapping(key, schema.DomainMatchFunc)
 	}
 
 	for {
@@ -85,7 +90,7 @@ func (m *Model) Load(itr LoadIterator) (
 
 			policies = append(policies, o)
 		} else {
-			rType, ok := m.roles[key]
+			rSchema, ok := m.roles[key]
 			if !ok {
 				err = fmt.Errorf("%w: %s", ErrUnknownAssertionType, key)
 
@@ -94,7 +99,7 @@ func (m *Model) Load(itr LoadIterator) (
 			rg := roleMappings[key]
 
 			var src, dst, domain string
-			if rType == RoleTypeWithDomain {
+			if rSchema.Type == RoleTypeWithDomain {
 				if len(vals) != 3 {
 					err = fmt.Errorf("%w: %s, %s", ErrRoleMappingMismatchRoleType, key, strings.Join(vals, ","))
 

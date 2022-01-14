@@ -67,7 +67,17 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 			return
 		}
 
-		rolesSchema[key] = roleType
+		var match core.RoleDomainMatchFunc
+		match, ok := optionConf.roleDomainMatchFuncs[key]
+
+		if !ok {
+			match = core.RoleDomainMatchEqual
+		}
+
+		rolesSchema[key] = core.RoleSchema{
+			Type:            roleType,
+			DomainMatchFunc: match,
+		}
 	}
 
 	eftType := v.GetString("policy_effect.type")

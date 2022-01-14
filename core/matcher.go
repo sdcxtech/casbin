@@ -93,8 +93,8 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 		funcs = append(funcs, fn.Overload)
 	}
 
-	for key, rType := range c.Roles {
-		if rType == RoleTypeWithDomain {
+	for key, rSchema := range c.Roles {
+		if rSchema.Type == RoleTypeWithDomain {
 			_decls = append(
 				_decls,
 				decls.NewFunction(key, decls.NewParameterizedOverload(
@@ -104,7 +104,7 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 					[]string{"from", "to", "domain"},
 				)),
 			)
-		} else if rType == RoleTypeWithoutDomain {
+		} else if rSchema.Type == RoleTypeWithoutDomain {
 			_decls = append(
 				_decls,
 				decls.NewFunction(key, decls.NewParameterizedOverload(

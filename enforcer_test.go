@@ -19,7 +19,9 @@ func TestEnforcer(t *testing.T) {
 	assert.NoError(t, err)
 
 	rolesSchema := make(core.RolesSchema)
-	rolesSchema["g"] = core.RoleTypeWithoutDomain
+	rolesSchema["g"] = core.RoleSchema{
+		Type: core.RoleTypeWithoutDomain,
+	}
 
 	matchers, err := core.MatchersConfig{
 		Roles: rolesSchema,

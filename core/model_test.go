@@ -41,8 +41,13 @@ func TestModelLoad(t *testing.T) {
 	assert.NoError(t, err)
 
 	rolesSchema := make(core.RolesSchema)
-	rolesSchema["g"] = core.RoleTypeWithDomain
-	rolesSchema["g1"] = core.RoleTypeWithoutDomain
+	rolesSchema["g"] = core.RoleSchema{
+		Type:            core.RoleTypeWithDomain,
+		DomainMatchFunc: core.RoleDomainMatchEqual,
+	}
+	rolesSchema["g1"] = core.RoleSchema{
+		Type: core.RoleTypeWithoutDomain,
+	}
 
 	matchers, err := core.MatchersConfig{
 		Roles: rolesSchema,

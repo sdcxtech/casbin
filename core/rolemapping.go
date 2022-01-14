@@ -1,8 +1,6 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/google/cel-go/common/types"
 	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/interpreter/functions"
@@ -10,23 +8,23 @@ import (
 	"github.com/sdcxtech/casbin/core/graph"
 )
 
-type ManagerDomainMatchFunc func(request string, mapping string) (matched bool)
+type RoleDomainMatchFunc func(request string, mapping string) (matched bool)
 
 type RoleMapping struct {
 	key         string
 	graph       *graph.Graph
-	domainMatch ManagerDomainMatchFunc
+	domainMatch RoleDomainMatchFunc
 }
 
 func (rg *RoleMapping) Key() string {
 	return rg.key
 }
 
-func NewRoleMapping(key string) *RoleMapping {
+func NewRoleMapping(key string, domainMatch RoleDomainMatchFunc) *RoleMapping {
 	return &RoleMapping{
 		key:         key,
 		graph:       graph.New(),
-		domainMatch: nil,
+		domainMatch: domainMatch,
 	}
 }
 
@@ -108,18 +106,18 @@ func (rg RoleMappings) GenerateGFuncs(
 	return
 }
 
-func (rg RoleMappings) SetDomainMatchFuncion(key string, domainMatch ManagerDomainMatchFunc) (err error) {
-	g, ok := rg[key]
-	if !ok {
-		err = fmt.Errorf("%w: %s", ErrNotFoundSpecifiedRoleMappingGroup, key)
+// func (rg RoleMappings) SetDomainMatchFuncion(key string, domainMatch DomainMatchFunc) (err error) {
+// 	g, ok := rg[key]
+// 	if !ok {
+// 		err = fmt.Errorf("%w: %s", ErrNotFoundSpecifiedRoleMappingGroup, key)
 
-		return
-	}
+// 		return
+// 	}
 
-	g.domainMatch = domainMatch
+// 	g.domainMatch = domainMatch
 
-	return
-}
+// 	return
+// }
 
 func RoleDomainMatchEqual(request, mapping string) bool {
 	return request == mapping

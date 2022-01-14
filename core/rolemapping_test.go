@@ -8,7 +8,7 @@ import (
 )
 
 func TestRoleMapping(t *testing.T) {
-	g := NewRoleMapping("g")
+	g := NewRoleMapping("g", nil)
 	overload := g.GenerateGFunc()
 	result := overload.Binary(types.String("a"), types.String("b"))
 	link, ok := result.Value().(bool)
@@ -30,16 +30,7 @@ func TestRoleMappings(t *testing.T) {
 		assert.Equal(t, 0, len(funcs))
 	}
 
-	rg["g"] = NewRoleMapping("g")
-
-	{
-		err := rg.SetDomainMatchFuncion("g", RoleDomainMatchEqual)
-		assert.NoError(t, err)
-	}
-	{
-		err := rg.SetDomainMatchFuncion("g1", RoleDomainMatchEqual)
-		assert.Error(t, err)
-	}
+	rg["g"] = NewRoleMapping("g", RoleDomainMatchEqual)
 
 	{
 		funcs := rg.GenerateGFuncs(nil)

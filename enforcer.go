@@ -90,20 +90,6 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 	return allow, err
 }
 
-func (e *Enforcer) SetDomainMatchFuncion(
-	key string,
-	domainMatch core.ManagerDomainMatchFunc,
-) (err error) {
-	err = e.roleMappings.SetDomainMatchFuncion(key, domainMatch)
-	if err != nil {
-		err = fmt.Errorf("set domain match func: %w", err)
-
-		return
-	}
-
-	return
-}
-
 // NewEnforcer new an enforcer by a model and a policy iterator.
 func NewEnforcer(
 	model *core.Model,

@@ -7,7 +7,8 @@ import (
 )
 
 type modelConfig struct {
-	extensionFuncs []core.ExtensionFunc
+	extensionFuncs       []core.ExtensionFunc
+	roleDomainMatchFuncs map[string]core.RoleDomainMatchFunc
 }
 
 // An option configures a new model when load it.
@@ -23,6 +24,7 @@ func (f loadModelOptionFunc) apply(c *modelConfig) error {
 
 func newLoadModelConfig(options ...ModelOption) (modelConfig, error) {
 	var c modelConfig
+	c.roleDomainMatchFuncs = make(map[string]core.RoleDomainMatchFunc)
 
 	err := applyLoadModelConfigOptions(&c, options...)
 
@@ -44,6 +46,14 @@ func applyLoadModelConfigOptions(c *modelConfig, options ...ModelOption) error {
 func ExtensionFuncs(funcs ...core.ExtensionFunc) ModelOption {
 	return loadModelOptionFunc(func(c *modelConfig) error {
 		c.extensionFuncs = funcs
+
+		return nil
+	})
+}
+
+func RoleDomainMatch(key string, fn core.RoleDomainMatchFunc) ModelOption {
+	return loadModelOptionFunc(func(c *modelConfig) error {
+		c.roleDomainMatchFuncs[key] = fn
 
 		return nil
 	})
