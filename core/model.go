@@ -69,7 +69,11 @@ func (m *Model) Load(itr LoadIterator) (
 	roleMappings = make(map[string]*RoleMapping)
 
 	for key, schema := range m.roles {
-		roleMappings[key] = NewRoleMapping(key, schema.DomainMatchFunc)
+		if schema.Type == RoleTypeWithDomain {
+			roleMappings[key] = NewRoleMapping(key, schema.DomainMatchFunc)
+		} else {
+			roleMappings[key] = NewRoleMapping(key, nil)
+		}
 	}
 
 	for {
