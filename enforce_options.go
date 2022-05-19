@@ -3,6 +3,7 @@ package casbin
 import (
 	"fmt"
 
+	"github.com/sdcxtech/casbin/core"
 	"github.com/sdcxtech/casbin/core/graph"
 )
 
@@ -73,6 +74,24 @@ func UseMatcher(name string) EnforceOption {
 			return
 		}
 		c.matcher = name
+
+		return
+	})
+}
+
+// WithPolicies inject per-calling raw policies.
+func WithRawPolicies(policies [][]string) EnforceOption {
+	return applyEnforceOptionFunc(func(c *enforceConfig) (err error) {
+		c.rawPolicies = policies
+
+		return
+	})
+}
+
+// WithPolicies inject per-calling policies.
+func WithPolicies(policies []core.Assertion) EnforceOption {
+	return applyEnforceOptionFunc(func(c *enforceConfig) (err error) {
+		c.policies = policies
 
 		return
 	})

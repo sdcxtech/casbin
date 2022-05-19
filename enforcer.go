@@ -19,6 +19,8 @@ type Enforcer struct {
 type enforceConfig struct {
 	withRoleGraphs map[string][]*graph.Graph
 	matcher        string
+	policies       core.Policies
+	rawPolicies    [][]string
 }
 
 // Enforce check if the requested permissions assertion is allowed.
@@ -80,7 +82,27 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 		return
 	}
 
-	allow, err = e.model.Effector().Execute(policyEval, e.policies)
+	// merge injected policies and glabol policies - start
+	policies := make([]core.Assertion, 0, len(e.policies)+len(conf.policies)+len(conf.rawPolicies))
+
+	// add injected policies first
+	policies = append(policies, conf.policies...)
+
+	if len(conf.rawPolicies) > 0 {
+		morePolicies, err1 := e.model.Policy().CreateAssertions(conf.rawPolicies)
+		if err1 != nil {
+			err = fmt.Errorf("invalid injected raw polices: %w", err1)
+
+			return
+		}
+
+		policies = append(policies, morePolicies...)
+	}
+
+	policies = append(policies, e.policies...)
+	// merge injected policies and glabol policies - end
+
+	allow, err = e.model.Effector().Execute(policyEval, policies)
 	if err != nil {
 		err = fmt.Errorf("effector execute: %w", err)
 

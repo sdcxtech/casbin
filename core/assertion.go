@@ -39,6 +39,24 @@ func (s AssertionSchema) CreateAssertion(vals []string) (assertion Assertion, er
 	return
 }
 
+// CreateAssertions creates a list of assertion from raw policies.
+func (s AssertionSchema) CreateAssertions(policies [][]string) (assertions Policies, err error) {
+	assertions = make([]Assertion, 0, len(policies))
+
+	for _, policy := range policies {
+		a, err1 := s.CreateAssertion(policy)
+		if err1 != nil {
+			err = fmt.Errorf("create assertion: %w", err1)
+
+			return
+		}
+
+		assertions = append(assertions, a)
+	}
+
+	return
+}
+
 // NewAssertionSchema constructes an assertion schema from a casbin definition line.
 func NewAssertionSchema(line string) (schema AssertionSchema, err error) {
 	subs := strings.Split(line, ",")
