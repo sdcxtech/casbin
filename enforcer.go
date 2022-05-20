@@ -17,10 +17,11 @@ type Enforcer struct {
 }
 
 type enforceConfig struct {
-	withRoleGraphs map[string][]*graph.Graph
-	matcher        string
-	policies       core.Policies
-	rawPolicies    [][]string
+	withRoleGraphs       map[string][]*graph.Graph
+	matcher              string
+	policies             core.Policies
+	rawPolicies          [][]string
+	onlyInjectedPolicies bool
 }
 
 // Enforce check if the requested permissions assertion is allowed.
@@ -99,7 +100,9 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 		policies = append(policies, morePolicies...)
 	}
 
-	policies = append(policies, e.policies...)
+	if !conf.onlyInjectedPolicies {
+		policies = append(policies, e.policies...)
+	}
 	// merge injected policies and glabol policies - end
 
 	allow, err = e.model.Effector().Execute(policyEval, policies)

@@ -96,3 +96,12 @@ func WithPolicies(policies []core.Assertion) EnforceOption {
 		return
 	})
 }
+
+// OnlyInjectedPolicies make enforcer don't use global policies.
+func OnlyInjectedPolicies() EnforceOption {
+	return applyEnforceOptionFunc(func(c *enforceConfig) (err error) {
+		c.onlyInjectedPolicies = true
+
+		return
+	})
+}
