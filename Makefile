@@ -1,7 +1,8 @@
 export GOBIN ?= $(shell pwd)/bin
+PATH := ${PATH}:${GOBIN}
 
-GOLINT = $(GOBIN)/golangci-lint run
-STATICCHECK = $(GOBIN)/staticcheck
+GOLINT = golangci-lint run
+STATICCHECK = staticcheck
 
 # Directories containing independent Go modules.
 #
