@@ -32,6 +32,8 @@ linters:
     - varnamelen
     - ireturn
     # style end
+    - nonamedreturns
+    - exhaustruct
   presets:
     - bugs
     - unused

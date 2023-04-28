@@ -10,8 +10,8 @@ import (
 // There is must be an effect column in policy.
 //
 // Valid effect values:
-//  - allow
-//  - deny
+//   - allow
+//   - deny
 func NewDenyOverride(policyEffectKey string) core.Effector {
 	return &denyOverride{eftKey: policyEffectKey}
 }
