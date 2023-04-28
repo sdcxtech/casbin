@@ -8,10 +8,15 @@ import (
 )
 
 // NewCSVIterator constructs an iterator that load CSV data from an io.Reader.
+//
+// The CSV data must be in the format described in RFC 4180.
+//
+// Additional support comments that start with '#'.
 func NewCSVIterator(ioReader io.Reader) (itr *CSVIterator) {
 	reader := csv.NewReader(ioReader)
 	reader.FieldsPerRecord = -1
 	reader.TrimLeadingSpace = true
+	reader.Comment = '#'
 
 	itr = &CSVIterator{
 		reader: reader,
