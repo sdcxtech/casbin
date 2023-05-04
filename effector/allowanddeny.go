@@ -6,14 +6,14 @@ import (
 
 // New an allow-and-deny effector.
 //
-// The effector return allow
-//      when any matched policy is allow,
-//      and there is no any matched policy is deny.
+// The effector return allow when any matched policy is allow,
+// and there is no any matched policy is deny.
+//
 // There is must be an effect column in policy.
 //
 // Valid effect values:
-//  - allow
-//  - deny
+//   - allow
+//   - deny
 func NewAllowAndDeny(effectKey string) core.Effector {
 	return &allowAndDeny{eftKey: effectKey}
 }

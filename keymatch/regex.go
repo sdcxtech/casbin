@@ -14,7 +14,7 @@ func NewRegexMatch() Func {
 		var re *regexp.Regexp
 
 		if v, ok := memorized.Load(pattern); ok {
-			re = v.(*regexp.Regexp) // nolint: forcetypeassert
+			re = v.(*regexp.Regexp) //nolint: forcetypeassert
 		} else {
 			re, err = regexp.Compile(pattern)
 			if err != nil {

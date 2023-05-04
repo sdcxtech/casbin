@@ -1,4 +1,4 @@
-package core // nolint: testpackage
+package core //nolint: testpackage
 
 import (
 	"testing"
