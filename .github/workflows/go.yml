@@ -18,15 +18,15 @@ jobs:
     steps:
 
     - name: Setup Go environment
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v6
       with:
         go-version: ${{ matrix.go }}
 
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
 
     - name: Load cached dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v4
       with:
         path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -37,7 +37,7 @@ jobs:
       run: go mod download
 
     - name: Test
-      if: matrix.latest
+      if: matrix.go == '1.20'
       run: make test
 
   lint:
@@ -48,13 +48,13 @@ jobs:
         go-version: ["1.20", "1.19", "1.18"]
 
     steps:
-    - uses: actions/setup-go@v4
+    - uses: actions/setup-go@v6
       with:
-        go-version: ${{ matrix.go }}
+        go-version: ${{ matrix.go-version }}
         cache: false
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@v3
+      uses: golangci/golangci-lint-action@v9
       with:
-        version: latest
+        version: v2.12
