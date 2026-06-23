@@ -1,8 +1,6 @@
 package keymatch
 
 import (
-	"fmt"
-
 	"github.com/google/cel-go/checker/decls"
 	"github.com/google/cel-go/common/types"
 	"github.com/google/cel-go/common/types/ref"
@@ -18,7 +16,7 @@ type Func func(key1, key2 string) (matched bool, err error)
 func ToExtensionFunc(funcName string, fn Func) core.ExtensionFunc {
 	return core.ExtensionFunc{
 		Decl: decls.NewFunction(funcName, decls.NewParameterizedOverload(
-			fmt.Sprintf("key_match_%s", funcName),
+			"key_match_"+funcName,
 			[]*exprpb.Type{decls.String, decls.String},
 			decls.Bool,
 			[]string{"key1", "key2"},
@@ -40,7 +38,17 @@ func celKeyMatchFunc(fn Func) functions.BinaryOp {
 			return types.NewErr("invalid arguments: key must be string type: key 2")
 		}
 
-		matched, err := fn(lhs.Value().(string), rhs.Value().(string))
+		key1, ok := lhs.Value().(string)
+		if !ok {
+			return types.NewErr("invalid arguments: key must be string type: key 1")
+		}
+
+		key2, ok := rhs.Value().(string)
+		if !ok {
+			return types.NewErr("invalid arguments: key must be string type: key 2")
+		}
+
+		matched, err := fn(key1, key2)
 		if err != nil {
 			return types.NewErr("key match func: %s", err.Error())
 		}

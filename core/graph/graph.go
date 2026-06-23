@@ -25,7 +25,7 @@ func (g *Graph) HasLink(
 	if foundNodes.Has(dst) {
 		hasLink = true
 
-		return
+		return hasLink, reached
 	}
 
 	srcLen := len(src)
@@ -47,7 +47,7 @@ func (g *Graph) HasLink(
 					if next == dst {
 						hasLink = true
 
-						return
+						return hasLink, reached
 					}
 
 					foundNodes.Insert(next)

@@ -14,7 +14,7 @@ type AssertionSchema struct {
 }
 
 // Has returns if the assertion schema has a field with the specified key.
-func (s *AssertionSchema) Has(key string) bool {
+func (s AssertionSchema) Has(key string) bool {
 	_, ok := s.keyToIndex[key]
 
 	return ok
@@ -63,7 +63,7 @@ func NewAssertionSchema(line string) (schema AssertionSchema, err error) {
 	if len(subs) < 2 {
 		err = fmt.Errorf("%w: at least 2 field", ErrInvalidAssertionSchema)
 
-		return
+		return schema, err
 	}
 
 	tokens := make([]string, 0, len(subs))
@@ -73,7 +73,7 @@ func NewAssertionSchema(line string) (schema AssertionSchema, err error) {
 		if len(t) == 0 {
 			err = fmt.Errorf("%w: can't be empty", ErrInvalidAssertionSchema)
 
-			return
+			return schema, err
 		}
 
 		tokens = append(tokens, t)

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/sdcxtech/casbin/core"
 )
@@ -34,11 +35,16 @@ func (it *mockAssertionIterator) Error() (err error) {
 }
 
 func TestModelLoad(t *testing.T) {
+	const (
+		resource = "order"
+		user     = "alice"
+	)
+
 	policy, err := core.NewAssertionSchema("sub, obj, act")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	request, err := core.NewAssertionSchema("sub, dom, obj, act")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	rolesSchema := make(core.RolesSchema)
 	rolesSchema["g"] = core.RoleSchema{
@@ -55,20 +61,20 @@ func TestModelLoad(t *testing.T) {
 			"m": "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act",
 		},
 	}.New()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	m := core.NewModel(policy, request, rolesSchema, nil, matchers)
 
 	itr := &mockAssertionIterator{
 		data: [][]string{
-			{"p", "alice", "order", "get"},
-			{"p", "alice", "order", "set"},
-			{"g", "alice", "admin", "console"},
-			{"g1", "alice", "admin"},
+			{"p", user, resource, "get"},
+			{"p", user, resource, "set"},
+			{"g", user, "admin", "console"},
+			{"g1", user, "admin"},
 		},
 	}
 
 	policies, _, err := m.Load(itr)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, policies, 2)
 }

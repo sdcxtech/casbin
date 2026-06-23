@@ -28,19 +28,21 @@ type enforceConfig struct {
 func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (allow bool, err error) {
 	conf, err := newEnforceConfig(options...)
 	if err != nil {
-		return
+		return allow, err
 	}
 
 	matcher, err := e.model.Matchers().Get(conf.matcher)
 	if err != nil {
-		return
+		err = fmt.Errorf("get matcher: %w", err)
+
+		return allow, err
 	}
 
 	rVar, err := e.model.Request().CreateAssertion(requestValues)
 	if err != nil {
 		err = fmt.Errorf("convert request vals: %w", err)
 
-		return
+		return allow, err
 	}
 
 	prg, err := matcher.Program(
@@ -53,7 +55,7 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 	if err != nil {
 		err = fmt.Errorf("new program: %w", err)
 
-		return
+		return allow, err
 	}
 
 	vars := make(map[string]interface{}, 1)
@@ -62,7 +64,6 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 		vars["p"] = policy
 
 		result, _ /*details*/, _err := prg.Eval(vars)
-
 		if _err != nil {
 			err = _err
 
@@ -94,7 +95,7 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 		if err1 != nil {
 			err = fmt.Errorf("invalid injected raw polices: %w", err1)
 
-			return
+			return allow, err
 		}
 
 		policies = append(policies, morePolicies...)
@@ -109,7 +110,7 @@ func (e *Enforcer) Enforce(requestValues []string, options ...EnforceOption) (al
 	if err != nil {
 		err = fmt.Errorf("effector execute: %w", err)
 
-		return
+		return allow, err
 	}
 
 	return allow, err

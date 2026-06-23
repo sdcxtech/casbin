@@ -36,9 +36,10 @@ func (a *allowAndDeny) Execute(
 
 		if matched {
 			eft := policy[a.eftKey]
-			if eft == EffectDeny {
+			switch eft {
+			case EffectDeny:
 				allow = false
-			} else if eft == EffectAllow {
+			case EffectAllow:
 				allow = true
 			}
 		}

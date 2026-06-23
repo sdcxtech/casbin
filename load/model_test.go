@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/spf13/viper"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/sdcxtech/casbin/load"
 )
@@ -33,10 +33,10 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		v := viper.New()
 		v.SetConfigType("toml")
 		err := v.ReadConfig(strings.NewReader(conf))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		_, err = load.ModelFromViper(v)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	}
 	{
 		conf := `
@@ -61,10 +61,10 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		v := viper.New()
 		v.SetConfigType("toml")
 		err := v.ReadConfig(strings.NewReader(conf))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		_, err = load.ModelFromViper(v)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	}
 	{
 		conf := `
@@ -89,10 +89,10 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		v := viper.New()
 		v.SetConfigType("toml")
 		err := v.ReadConfig(strings.NewReader(conf))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		_, err = load.ModelFromViper(v)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	}
 }
 
@@ -119,10 +119,10 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		v := viper.New()
 		v.SetConfigType("toml")
 		err := v.ReadConfig(strings.NewReader(conf))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		_, err = load.ModelFromViper(v)
-		assert.Error(t, err)
+		require.Error(t, err)
 	}
 	{
 		conf := `
@@ -146,10 +146,10 @@ m = "g(r.sub, p.sub, r.dom) && r.obj == p.obj && r.act == p.act"
 		v := viper.New()
 		v.SetConfigType("toml")
 		err := v.ReadConfig(strings.NewReader(conf))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		_, err = load.ModelFromViper(v)
-		assert.Error(t, err)
+		require.Error(t, err)
 	}
 }
 
@@ -175,9 +175,9 @@ type = "allow-override"
 		v := viper.New()
 		v.SetConfigType("toml")
 		err := v.ReadConfig(strings.NewReader(conf))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		_, err = load.ModelFromViper(v)
-		assert.Error(t, err)
+		require.Error(t, err)
 	}
 }

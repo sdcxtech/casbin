@@ -27,13 +27,13 @@ func TestRoleMappings(t *testing.T) {
 	rg := RoleMappings{}
 	{
 		funcs := rg.GenerateGFuncs(nil)
-		assert.Equal(t, 0, len(funcs))
+		assert.Empty(t, funcs)
 	}
 
 	rg["g"] = NewRoleMapping("g", RoleDomainMatchEqual)
 
 	{
 		funcs := rg.GenerateGFuncs(nil)
-		assert.Equal(t, 1, len(funcs))
+		assert.Len(t, funcs, 1)
 	}
 }

@@ -15,6 +15,7 @@ func (f applyEnforceOptionFunc) apply(c *enforceConfig) error {
 
 func newEnforceConfig(options ...EnforceOption) (enforceConfig, error) {
 	var c enforceConfig
+
 	c.matcher = "m"
 	c.withRoleGraphs = make(map[string][]*graph.Graph)
 
@@ -37,7 +38,7 @@ func applyEnforceConfigOptions(c *enforceConfig, options ...EnforceOption) error
 
 // EnforceOption is an option for calling enforce on an enforcer.
 type EnforceOption interface {
-	apply(*enforceConfig) error
+	apply(c *enforceConfig) error
 }
 
 type enforceOptionWithRoleGraphsImpl struct {
@@ -73,6 +74,7 @@ func UseMatcher(name string) EnforceOption {
 
 			return
 		}
+
 		c.matcher = name
 
 		return

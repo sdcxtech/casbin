@@ -39,21 +39,21 @@ const (
 func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, err error) {
 	optionConf, err := newLoadModelConfig(options...)
 	if err != nil {
-		return
+		return model, err
 	}
 
 	request, err := core.NewAssertionSchema(v.GetString("request_definition.r"))
 	if err != nil {
 		err = fmt.Errorf("request_definition.r: %w", err)
 
-		return
+		return model, err
 	}
 
 	policy, err := core.NewAssertionSchema(v.GetString("policy_definition.p"))
 	if err != nil {
 		err = fmt.Errorf("policy_definition.p: %w", err)
 
-		return
+		return model, err
 	}
 
 	rolesSchema := make(core.RolesSchema)
@@ -64,10 +64,11 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 		if _err != nil {
 			err = _err
 
-			return
+			return model, err
 		}
 
 		var match core.RoleDomainMatchFunc
+
 		match, ok := optionConf.roleDomainMatchFuncs[key]
 
 		if !ok {
@@ -92,7 +93,7 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 		if eftKey == "" || !policy.Has(eftKey) {
 			err = fmt.Errorf("%w: %s", ErrNeedEffectFieldKey, eftType)
 
-			return
+			return model, err
 		}
 
 		eft = effector.NewDenyOverride(eftKey)
@@ -100,7 +101,7 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 		if eftKey == "" || !policy.Has(eftKey) {
 			err = fmt.Errorf("%w: %s", ErrNeedEffectFieldKey, eftType)
 
-			return
+			return model, err
 		}
 
 		eft = effector.NewAllowAndDeny(eftKey)
@@ -109,7 +110,7 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 	}
 
 	if err != nil {
-		return
+		return model, err
 	}
 
 	mattchersDefine := v.GetStringMapString("matchers")
@@ -122,7 +123,7 @@ func ModelFromViper(v *viper.Viper, options ...ModelOption) (model *core.Model, 
 	if err != nil {
 		err = fmt.Errorf("new matchers: %w", err)
 
-		return
+		return model, err
 	}
 
 	model = core.NewModel(policy, request, rolesSchema, eft, matchers)

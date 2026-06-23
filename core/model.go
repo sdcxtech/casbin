@@ -80,8 +80,11 @@ func (m *Model) Load(itr LoadIterator) (
 		ok, key, vals := itr.Next()
 		if !ok {
 			err = itr.Error()
+			if err != nil {
+				err = fmt.Errorf("load iterator: %w", err)
+			}
 
-			return
+			return policies, roleMappings, err
 		}
 
 		if key == "p" {
@@ -89,7 +92,7 @@ func (m *Model) Load(itr LoadIterator) (
 			if _err != nil {
 				err = fmt.Errorf("load policy: %w", _err)
 
-				return
+				return policies, roleMappings, err
 			}
 
 			policies = append(policies, o)
@@ -98,17 +101,20 @@ func (m *Model) Load(itr LoadIterator) (
 			if !ok {
 				err = fmt.Errorf("%w: %s", ErrUnknownAssertionType, key)
 
-				return
+				return policies, roleMappings, err
 			}
+
 			rg := roleMappings[key]
 
 			var src, dst, domain string
+
 			if rSchema.Type == RoleTypeWithDomain {
 				if len(vals) != 3 {
 					err = fmt.Errorf("%w: %s, %s", ErrRoleMappingMismatchRoleType, key, strings.Join(vals, ","))
 
-					return
+					return policies, roleMappings, err
 				}
+
 				src = vals[0]
 				dst = vals[1]
 				domain = vals[2]
@@ -116,8 +122,9 @@ func (m *Model) Load(itr LoadIterator) (
 				if len(vals) != 2 {
 					err = fmt.Errorf("%w: %s, %s", ErrRoleMappingMismatchRoleType, key, strings.Join(vals, ","))
 
-					return
+					return policies, roleMappings, err
 				}
+
 				src = vals[0]
 				dst = vals[1]
 			}

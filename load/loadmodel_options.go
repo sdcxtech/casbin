@@ -13,7 +13,7 @@ type modelConfig struct {
 
 // An option configures a new model when load it.
 type ModelOption interface {
-	apply(*modelConfig) error
+	apply(c *modelConfig) error
 }
 
 type loadModelOptionFunc func(c *modelConfig) error
@@ -24,6 +24,7 @@ func (f loadModelOptionFunc) apply(c *modelConfig) error {
 
 func newLoadModelConfig(options ...ModelOption) (modelConfig, error) {
 	var c modelConfig
+
 	c.roleDomainMatchFuncs = make(map[string]core.RoleDomainMatchFunc)
 
 	err := applyLoadModelConfigOptions(&c, options...)

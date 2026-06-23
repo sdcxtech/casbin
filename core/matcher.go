@@ -64,13 +64,13 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 	if c.Roles == nil {
 		err = fmt.Errorf("%w: must give Roles", ErrInvalidMatchersConfig)
 
-		return
+		return m, err
 	}
 
 	if len(c.Define) == 0 {
 		err = fmt.Errorf("%w: must give at least one matcher definition", ErrInvalidMatchersConfig)
 
-		return
+		return m, err
 	}
 
 	m.matchers = make(map[string]Matcher)
@@ -94,26 +94,29 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 	}
 
 	for key, rSchema := range c.Roles {
-		if rSchema.Type == RoleTypeWithDomain {
+		switch rSchema.Type {
+		case RoleTypeWithDomain:
 			_decls = append(
 				_decls,
 				decls.NewFunction(key, decls.NewParameterizedOverload(
-					fmt.Sprintf("g_%s", key),
+					"g_"+key,
 					[]*exprpb.Type{decls.String, decls.String, decls.String},
 					decls.Bool,
 					[]string{"from", "to", "domain"},
 				)),
 			)
-		} else if rSchema.Type == RoleTypeWithoutDomain {
+		case RoleTypeWithoutDomain:
 			_decls = append(
 				_decls,
 				decls.NewFunction(key, decls.NewParameterizedOverload(
-					fmt.Sprintf("g_%s", key),
+					"g_"+key,
 					[]*exprpb.Type{decls.String, decls.String},
 					decls.Bool,
 					[]string{"from", "to"},
 				)),
 			)
+		case RoleTypeInvalid:
+			continue
 		}
 	}
 
@@ -123,7 +126,7 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 	if err != nil {
 		err = fmt.Errorf("new cel env: %w", err)
 
-		return
+		return m, err
 	}
 
 	for key, v := range c.Define {
@@ -131,7 +134,7 @@ func (c MatchersConfig) New() (m Matchers, err error) {
 		if iss.Err() != nil {
 			err = fmt.Errorf("compile match expression: %w", iss.Err())
 
-			return
+			return m, err
 		}
 
 		matcher := Matcher{

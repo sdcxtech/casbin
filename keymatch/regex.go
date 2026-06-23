@@ -22,6 +22,7 @@ func NewRegexMatch() Func {
 
 				return
 			}
+
 			memorized.Store(pattern, re)
 		}
 

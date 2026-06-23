@@ -9,14 +9,15 @@ import (
 	"github.com/sdcxtech/casbin/effector"
 	"github.com/sdcxtech/casbin/load"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEnforcer(t *testing.T) {
 	policy, err := core.NewAssertionSchema("sub, obj, act")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	request, err := core.NewAssertionSchema("sub, obj, act")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	rolesSchema := make(core.RolesSchema)
 	rolesSchema["g"] = core.RoleSchema{
@@ -29,7 +30,7 @@ func TestEnforcer(t *testing.T) {
 			"m": "g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act",
 		},
 	}.New()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	m := core.NewModel(policy, request, rolesSchema, effector.NewAllowOverride(), matchers)
 
@@ -42,9 +43,9 @@ func TestEnforcer(t *testing.T) {
 	itr := load.NewCSVIterator(reader)
 
 	enforcer, err := casbin.NewEnforcer(m, itr)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	allow, err := enforcer.Enforce(casbin.Request("admin", "order", "get"))
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.True(t, allow)
 }

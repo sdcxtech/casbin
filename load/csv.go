@@ -32,23 +32,23 @@ type CSVIterator struct {
 
 func (it *CSVIterator) Next() (ok bool, key string, vals []string) {
 	if it.err != nil {
-		return
+		return ok, key, vals
 	}
 
 	var record []string
 
 	for {
 		var err error
-		record, err = it.reader.Read()
 
+		record, err = it.reader.Read()
 		if err != nil {
 			if errors.Is(err, io.EOF) {
-				return
+				return ok, key, vals
 			}
 
 			it.err = err
 
-			return
+			return ok, key, vals
 		}
 
 		if len(record) > 1 {
